@@ -7,7 +7,8 @@ Vue.component(AreaSelector.name, AreaSelector);
 var demo = new Vue({
     el: '#app',
     data: {
-        address: '浙江-杭州-西湖区'
+        address: '浙江_杭州_西湖区',
+        sep:'_'
     },
     methods: {
         change(area){
@@ -15,7 +16,7 @@ var demo = new Vue({
             console.log(area);
         },
         modify(area){
-            this.address = '广西-百色-德保县'
+            this.address = '广西_百色_德保县'
         }
     }
 

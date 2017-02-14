@@ -27,11 +27,15 @@
             area: {
                 type: String,
                 default: ''
+            },
+            sep:{
+                type:String,
+                default:'-'
             }
         },
         created(){
-            var province = this.area.split('-')[0];
-            var city = this.area.split('-')[1];
+            var province = this.area.split(this.sep)[0];
+            var city = this.area.split(this.sep)[1];
             if (province != '') {
                 this.cities = AREA.city[province];
             }
@@ -40,10 +44,11 @@
             }
         },
         data(){
+            var that=this;
             return {
-                p: this.area.split('-')[0] || '',
-                c: this.area.split('-')[1] || '',
-                d: this.area.split('-')[2] || '',
+                p: this.area.split(that.sep)[0] || '',
+                c: this.area.split(that.sep)[1] || '',
+                d: this.area.split(that.sep)[2] || '',
                 provinces: AREA.province,
                 cities: AREA.city[this.p] || [],
                 districts: AREA.region[this.c] || [],
@@ -62,7 +67,7 @@
                 if (this.d != '') {
                     areaArr.push(this.d);
                 }
-                return areaArr.join('-') || '';
+                return areaArr.join(this.sep) || '';
             }
         },
         watch: {
@@ -101,9 +106,9 @@
                 })
             },
             area(){
-                this.p = this.area.split('-')[0] || '';
-                this.c = this.area.split('-')[1] || '';
-                this.d = this.area.split('-')[2] || '';
+                this.p = this.area.split(this.sep)[0] || '';
+                this.c = this.area.split(this.sep)[1] || '';
+                this.d = this.area.split(this.sep)[2] || '';
             },
             result(newVal){
                 this.$emit('change',newVal);

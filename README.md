@@ -16,7 +16,7 @@ Vue.component(AreaSelector.name,AreaSelector);
 参数|描述|类型|默认值
 --- | --- | --- | --- |
 area | 初始选中的地区,以-分割如'浙江-杭州-西湖区' | String | ''
-
+sep | 地区分隔符 | String | '-'
 
 ## 事件说明
 
