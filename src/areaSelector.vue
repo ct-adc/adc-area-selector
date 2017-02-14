@@ -62,23 +62,25 @@
                 if (this.d != '') {
                     areaArr.push(this.d);
                 }
-                return areaArr.join('-');
+                return areaArr.join('-') || '';
             }
         },
         watch: {
             p(n){
                 var that=this;
-                this.cities = AREA.city[n];
-                var matched = this.cities.filter(function (city) {
-                            return city.Name === that.c;
-                        }).length > 0;
+                this.cities = AREA.city[n] || [];
+                if(typeof this.cities!=='undefined'){
+                    var matched = this.cities.filter(function (city) {
+                                return city.Name === that.c;
+                            }).length > 0;
 
-                if (!matched) {
-                    this.c = '';
+                    if (!matched) {
+                        this.c = '';
+                    }
+                    this.$nextTick(function () {
+                        this.result=this.getArea();
+                    })
                 }
-                this.$nextTick(function () {
-                    this.result=this.getArea();
-                })
             },
             c(n){
                 var that=this;
