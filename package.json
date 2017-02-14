@@ -1,7 +1,7 @@
 {
   "name": "ct-adc-area-selector",
   "description": "vue component areaSelector",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "ruby",
   "private": false,
   "scripts": {
