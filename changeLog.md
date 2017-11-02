@@ -4,9 +4,13 @@
 
 *2017-11-02*
 
-- 修改 修改area属性为initial-area
+- 修改 修改area属性为initialArea
 
-- 新增 
+- 优化 新增showNation和codeForNation属性，用于对全国选项的支持
+
+- 新增 为getArea新增参数readable
+
+- 优化 添加对地区编码的支持，同时兼容地区文本和地区编码
 
 ### 0.1.0
 
