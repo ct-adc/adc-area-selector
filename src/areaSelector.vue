@@ -132,7 +132,6 @@
                 this.$nextTick(function() {
                     if (this.area !== this.getArea()) {
                         this.area = this.getArea();
-                        this.$emit('change', this.area);
                     }
                 })
             },
@@ -150,7 +149,6 @@
                     this.$nextTick(function() {
                         if (this.area !== this.getArea()) {
                             this.area = this.getArea();
-                            this.$emit('change', this.area);
                         }
                     })
                 }
@@ -167,7 +165,6 @@
                 this.$nextTick(function() {
                     if(this.area !== this.getArea()){
                         this.area=this.getArea();
-                        this.$emit('change',this.area);
                     }
                 })
             },
@@ -175,7 +172,6 @@
                 this.$nextTick(function() {
                     if(this.area !== this.getArea()){
                         this.area=this.getArea();
-                        this.$emit('change',this.area);
                     }
                 })
             },
@@ -190,9 +186,14 @@
                 } else {
                     area = this.initialArea;
                 }
+                this.area = area;
+                this.n = area==='全国' ? '全国' : '';
                 this.p = area==='全国' ? '' : area.split(this.sep)[0] || '';
                 this.c = area==='全国' ? '' : area.split(this.sep)[1] || '';
                 this.d = area==='全国' ? '' : area.split(this.sep)[2] || '';
+            },
+            area(n){
+                this.$emit('change', this.area);
             }
         }
     }

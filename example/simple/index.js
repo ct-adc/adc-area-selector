@@ -16,7 +16,7 @@ var demo = new Vue({
             console.log('===========change!!!===========',area,this.$refs.area.getArea(false));
         },
         modify(area){
-            this.address = '广西_百色_德保县'
+            this.address = '广西'
         }
     }
 
