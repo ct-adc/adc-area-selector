@@ -7,7 +7,7 @@ Vue.component(AreaSelector.name, AreaSelector);
 var demo = new Vue({
     el: '#app',
     data: {
-        address: '0601',
+        address: '00',
         sep:'_'
     },
     methods: {
