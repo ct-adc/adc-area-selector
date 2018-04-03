@@ -201,12 +201,19 @@
 
 <style scoped>
     .area-select-container {
-        display: flex;
+        display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+  		display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+		display: -ms-flexbox;      /* TWEENER - IE 10 */
+		display: -webkit-flex;     /* NEW - Chrome */
+		display: flex;
         justify-content: space-between;
     }
 
     .area-select {
-        /*width: 25%;*/
-        display: inline-block;
+        -webkit-box-flex: 1;            /* OLD - iOS 6-, Safari 3.1-6 */
+  		-moz-box-flex: 1;               /* OLD - Firefox 19- */
+  		-webkit-flex: 1;                /* Chrome */
+  		-ms-flex: 1;                    /* IE 10 */
+  		flex: 1;
     }
 </style>
