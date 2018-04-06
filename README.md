@@ -4,7 +4,7 @@
 
 ## 组件示例图
 
-[!img](https://github.com/ct-adc/adc-area-selector/blob/dev/area-selector.png)
+![img](https://github.com/ct-adc/adc-area-selector/blob/dev/area-selector.png)
 
 ## 在线demo
 
