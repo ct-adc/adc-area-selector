@@ -54,7 +54,7 @@
             },
             min: {
                 type: String,
-                default: 'province' // province city region
+                default: 'region' // province city region
             }
         },
         created() {
