@@ -52,11 +52,7 @@ min | 精确到的地区类型 | String | 'region' | 'province' / 'city' / 'regi
 
 ### getArea
     
-    参数：readable 默认为true
-    
 获得选择的结果
-
-方法描述。。。。。。
 
 #### 参数列表
 
