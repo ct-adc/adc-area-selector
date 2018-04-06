@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/cascader.iml" filepath="$PROJECT_DIR$/.idea/cascader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/area-selector.iml" filepath="$PROJECT_DIR$/.idea/area-selector.iml" />
     </modules>
   </component>
 </project>

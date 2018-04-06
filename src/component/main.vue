@@ -13,6 +13,7 @@
         </select>
 
         <select class="form-control area-select mr10"
+                v-if="showCity"
                 :disabled="disabled"
                 v-model="c">
             <option value="">市</option>
@@ -20,6 +21,7 @@
         </select>
 
         <select class="form-control area-select mr10"
+                v-if="showRegion"
                 :disabled="disabled"
                 v-model="d">
             <option value="">县 / 区</option>
@@ -30,7 +32,8 @@
 
 <script type="text/ecmascript-6">
     import Utility from 'ct-utility';
-    export default{
+
+    export default {
         name: 'area-selector',
         props: {
             initialArea: {
@@ -41,89 +44,100 @@
                 type: String,
                 default: '-'
             },
-            showNation:{
-                type:Boolean,
-                default:false
+            showNation: {
+                type: Boolean,
+                default: false
             },
             codeForNation: {
                 type: String,
                 default: '00'
+            },
+            min: {
+                type: String,
+                default: 'province' // province city region
             }
         },
-        created(){
+        created() {
             if (this.area !== '全国') {
-                var province = this.area.split(this.sep)[0];
-                var city = this.area.split(this.sep)[1];
-                if (province != '') {
+                const province = this.area.split(this.sep)[0];
+                const city = this.area.split(this.sep)[1];
+
+                if (province !== '') {
                     this.cities = AREA.city[province];
                 }
-                if (city != '') {
+                if (city !== '') {
                     this.districts = AREA.region[city];
                 }
             }
         },
-        data(){
-            var that = this;
-            var area = '';
+        data() {
+            const that = this;
+            let area = '';
 
             if (/^\d+$/.test(this.initialArea)) {
-                if(this.initialArea === this.codeForNation){
-                    area = '全国';
-                }else{
-                    area = Utility.areaDataFormat.getAreaNameById(this.initialArea).replace(/-/g, this.sep);
-                }
+                area = Utility.areaDataFormat.getAreaNameById(this.initialArea).replace(/-/g, this.sep);
             } else {
                 area = this.initialArea;
             }
             return {
                 area: area,
                 n: area === '全国' ? '全国' : '',
-                p: area === '全国' ? '' : (area.split(that.sep)[0] || ''),
-                c: area === '全国' ? '' : (area.split(that.sep)[1] || ''),
-                d: area === '全国' ? '' : (area.split(that.sep)[2] || ''),
+                p: area === '全国' ? '' : area.split(that.sep)[0] || '',
+                c: area === '全国' ? '' : area.split(that.sep)[1] || '',
+                d: area === '全国' ? '' : area.split(that.sep)[2] || '',
                 provinces: AREA.province,
                 cities: AREA.city[that.p] || [],
                 districts: AREA.region[that.c] || []
-            }
+            };
         },
         computed: {
-            disabled(){
+            disabled() {
                 return this.n === '全国';
+            },
+            showCity(){
+                return this.min === 'city' || this.min === 'region';
+            },
+            showRegion(){
+                return this.min === 'region';
             }
         },
         methods: {
-            getArea(readable = true){
-                var areaArr = [];
+            getArea(readable = true) {
+                let result;
+
                 if (this.n === '全国') {
                     if (readable) {
-                        return '全国';
+                        result = '全国';
                     } else {
-                        return this.codeForNation;
+                        result = this.codeForNation;
                     }
                 } else {
-                    if (this.p != '') {
+                    const areaArr = [];
+
+                    if (this.p !== '') {
                         areaArr.push(this.p);
                     }
-                    if (this.c != '') {
+                    if (this.showCity && this.c !== '') {
                         areaArr.push(this.c);
                     }
-                    if (this.d != '') {
+                    if (this.showRegion && this.d !== '') {
                         areaArr.push(this.d);
                     }
                     if (readable) {
-                        return areaArr.join(this.sep) || '';
+                        result = areaArr.join(this.sep) || '';
                     } else {
                         if (areaArr.length > 0) {
-                            return Utility.areaDataFormat.getAreaIdByName(areaArr.join(this.sep));
+                            result = Utility.areaDataFormat.getAreaIdByName(areaArr.join(this.sep));
                         } else {
-                            return '';
+                            result = '';
                         }
                     }
                 }
+                return result;
             }
         },
         watch: {
-            n(n){
+            n(n) {
                 if (n === '全国') {
                     this.p = '';
                     this.c = '';
@@ -132,16 +146,18 @@
                 this.$nextTick(function() {
                     if (this.area !== this.getArea()) {
                         this.area = this.getArea();
+                        this.$emit('change', this.area);
                     }
-                })
+                });
             },
-            p(n){
-                var that = this;
+            p(n) {
+                const that = this;
+
                 this.cities = AREA.city[n] || [];
                 if (typeof this.cities !== 'undefined') {
-                    var matched = this.cities.filter(function(city) {
-                                return city.Name === that.c;
-                            }).length > 0;
+                    const matched = this.cities.filter(function(city) {
+                        return city.Name === that.c;
+                    }).length > 0;
 
                     if (!matched) {
                         this.c = '';
@@ -149,71 +165,73 @@
                     this.$nextTick(function() {
                         if (this.area !== this.getArea()) {
                             this.area = this.getArea();
+                            this.$emit('change', this.area);
                         }
-                    })
+                    });
                 }
             },
-            c(n){
-                var that = this;
+            c(n) {
+                const that = this;
+
                 this.districts = AREA.region[n] || [];
-                var matched = this.districts.filter(function(district) {
-                            return district.Name === that.d;
-                        }).length > 0;
+
+                const matched = this.districts.filter(function(district) {
+                    return district.Name === that.d;
+                }).length > 0;
+
                 if (!matched) {
                     this.d = '';
                 }
                 this.$nextTick(function() {
-                    if(this.area !== this.getArea()){
-                        this.area=this.getArea();
+                    if (this.area !== this.getArea()) {
+                        this.area = this.getArea();
+                        this.$emit('change', this.area);
                     }
-                })
+                });
             },
-            d(){
+            d() {
                 this.$nextTick(function() {
-                    if(this.area !== this.getArea()){
-                        this.area=this.getArea();
+                    if (this.area !== this.getArea()) {
+                        this.area = this.getArea();
+                        this.$emit('change', this.area);
                     }
-                })
+                });
             },
-            initialArea(n){
-                var area = '';
+            initialArea(n) {
+                let area = '';
+
                 if (/^\d+$/.test(n)) {
-                    if(n===this.codeForNation){
-                        area='全国';
-                    }else{
+                    if (n === this.codeForNation) {
+                        area = '全国';
+                    } else {
                         area = Utility.areaDataFormat.getAreaNameById(this.initialArea).replace(/-/g, this.sep);
                     }
                 } else {
                     area = this.initialArea;
                 }
-                this.area = area;
-                this.n = area==='全国' ? '全国' : '';
-                this.p = area==='全国' ? '' : area.split(this.sep)[0] || '';
-                this.c = area==='全国' ? '' : area.split(this.sep)[1] || '';
-                this.d = area==='全国' ? '' : area.split(this.sep)[2] || '';
-            },
-            area(n){
-                this.$emit('change', this.area);
+                this.p = area === '全国' ? '' : area.split(this.sep)[0] || '';
+                this.c = area === '全国' ? '' : area.split(this.sep)[1] || '';
+                this.d = area === '全国' ? '' : area.split(this.sep)[2] || '';
             }
         }
-    }
+    };
 </script>
 
 <style scoped>
     .area-select-container {
-        display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-  		display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
-		display: -ms-flexbox;      /* TWEENER - IE 10 */
-		display: -webkit-flex;     /* NEW - Chrome */
-		display: flex;
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
+        display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Chrome */
+        display: flex;
         justify-content: space-between;
     }
 
     .area-select {
-        -webkit-box-flex: 1;            /* OLD - iOS 6-, Safari 3.1-6 */
-  		-moz-box-flex: 1;               /* OLD - Firefox 19- */
-  		-webkit-flex: 1;                /* Chrome */
-  		-ms-flex: 1;                    /* IE 10 */
-  		flex: 1;
+        -webkit-box-flex: 1; /* OLD - iOS 6-, Safari 3.1-6 */
+        -moz-box-flex: 1; /* OLD - Firefox 19- */
+        -webkit-flex: 1; /* Chrome */
+        -ms-flex: 1; /* IE 10 */
+        flex: 1;
     }
 </style>
