@@ -55,18 +55,11 @@
             min: {
                 type: String,
                 default: 'region' // province city region
-            }
-        },
-        created() {
-            if (this.area !== '全国') {
-                const province = this.area.split(this.sep)[0];
-                const city = this.area.split(this.sep)[1];
-
-                if (province !== '') {
-                    this.cities = AREA.city[province];
-                }
-                if (city !== '') {
-                    this.districts = AREA.region[city];
+            },
+            areaList: {
+                type: Function,
+                default: AREA=>{
+                    return AREA;
                 }
             }
         },
@@ -84,10 +77,7 @@
                 n: area === '全国' ? '全国' : '',
                 p: area === '全国' ? '' : area.split(that.sep)[0] || '',
                 c: area === '全国' ? '' : area.split(that.sep)[1] || '',
-                d: area === '全国' ? '' : area.split(that.sep)[2] || '',
-                provinces: AREA.province,
-                cities: AREA.city[that.p] || [],
-                districts: AREA.region[that.c] || []
+                d: area === '全国' ? '' : area.split(that.sep)[2] || ''
             };
         },
         computed: {
@@ -99,6 +89,27 @@
             },
             showRegion(){
                 return this.min === 'region';
+            },
+            source(){
+                return this.areaList(AREA);
+            },
+            provinces(){
+                if (this.area !== '全国'){
+                    return this.source.province;
+                }
+                return [];
+            },
+            cities(){
+                if (this.p !== ''){
+                    return this.source.city[this.p] || [];
+                }
+                return [];
+            },
+            districts(){
+                if (this.c !== ''){
+                    return this.source.region[this.c] || [];
+                }
+                return [];
             }
         },
         methods: {
@@ -150,10 +161,9 @@
                     }
                 });
             },
-            p(n) {
+            p() {
                 const that = this;
 
-                this.cities = AREA.city[n] || [];
                 if (typeof this.cities !== 'undefined') {
                     const matched = this.cities.filter(function(city) {
                         return city.Name === that.c;
@@ -170,10 +180,8 @@
                     });
                 }
             },
-            c(n) {
+            c() {
                 const that = this;
-
-                this.districts = AREA.region[n] || [];
 
                 const matched = this.districts.filter(function(district) {
                     return district.Name === that.d;
