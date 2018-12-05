@@ -33,7 +33,7 @@ new Vue({
         AreaSelector
     },
     data: {
-        address: '全国',
+        address: '0',
         sep: '_'
     },
     methods: {
@@ -42,14 +42,13 @@ new Vue({
             console.log('===========change!!!===========', area, this.$refs.area.getArea(false));
         },
         modify() {
-            this.address = '广西_百色_德保县';
+            this.address = '浙江_杭州_滨江区';
         },
         getArea() {
             console.log('===========get!!!===========', this.$refs.area.getArea());
             console.log('===========get!!!===========', this.$refs.area.getArea(false));
         },
         areaList() {
-            console.log(JSON.stringify(utility.areaDataFormat.filterByName(['浙江-杭州-滨江区', '江西-南昌', '江苏'], true)));
             return utility.areaDataFormat.filterByName(['浙江-杭州-滨江区', '江西-南昌', '江苏'], true);
             // return utility.areaDataFormat.filterByCode(['060101'], true);
             // return utility.areaDataFormat.filterByCode(['060100'], true);

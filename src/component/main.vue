@@ -9,7 +9,7 @@
                 :disabled="disabled"
                 v-model="p">
             <option value="">省</option>
-            <option v-for="province in provinces">{{ province.Name }}</option>
+            <option v-for="province in provinces" :key="province.Name">{{ province.Name }}</option>
         </select>
 
         <select class="form-control area-select mr10"
@@ -17,7 +17,7 @@
                 :disabled="disabled"
                 v-model="c">
             <option value="">市</option>
-            <option v-for="city in cities">{{ city.Name }}</option>
+            <option v-for="city in cities" :key="city.Name">{{ city.Name }}</option>
         </select>
 
         <select class="form-control area-select mr10"
@@ -25,7 +25,7 @@
                 :disabled="disabled"
                 v-model="d">
             <option value="">县 / 区</option>
-            <option v-for="district in districts">{{ district.Name }}</option>
+            <option v-for="district in districts" :key="district.Name">{{ district.Name }}</option>
         </select>
     </div>
 </template>
@@ -67,12 +67,10 @@
             const that = this;
             let area = '';
 
-            if (/^\d+$/.test(this.initialArea)) {
-                if (this.initialArea === '00'){
-                    area = '全国';
-                } else {
-                    area = Utility.areaDataFormat.getAreaNameById(this.initialArea).replace(/-/g, this.sep);
-                }
+            if (this.initialArea === this.codeForNation){
+                area = '全国';
+            } else if (/^\d+$/.test(this.initialArea)) {
+                area = Utility.areaDataFormat.getAreaNameById(this.initialArea).replace(/-/g, this.sep);
             } else {
                 area = this.initialArea;
             }
@@ -212,18 +210,18 @@
             initialArea(n) {
                 let area = '';
 
-                if (/^\d+$/.test(n)) {
-                    if (n === this.codeForNation) {
-                        area = '全国';
-                    } else {
-                        area = Utility.areaDataFormat.getAreaNameById(this.initialArea).replace(/-/g, this.sep);
-                    }
+                if (n === this.codeForNation) {
+                    area = '全国';
+                } else if (/^\d+$/.test(n)) {
+                    area = Utility.areaDataFormat.getAreaNameById(this.initialArea).replace(/-/g, this.sep);
                 } else {
                     area = this.initialArea;
                 }
                 this.p = area === '全国' ? '' : area.split(this.sep)[0] || '';
                 this.c = area === '全国' ? '' : area.split(this.sep)[1] || '';
                 this.d = area === '全国' ? '' : area.split(this.sep)[2] || '';
+                this.n = area !== '全国' ? '' : '全国';
+                this.area = area;
             }
         }
     };
