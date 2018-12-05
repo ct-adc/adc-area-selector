@@ -68,7 +68,11 @@
             let area = '';
 
             if (/^\d+$/.test(this.initialArea)) {
-                area = Utility.areaDataFormat.getAreaNameById(this.initialArea).replace(/-/g, this.sep);
+                if (this.initialArea === '00'){
+                    area = '全国';
+                } else {
+                    area = Utility.areaDataFormat.getAreaNameById(this.initialArea).replace(/-/g, this.sep);
+                }
             } else {
                 area = this.initialArea;
             }

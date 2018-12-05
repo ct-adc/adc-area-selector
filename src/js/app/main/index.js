@@ -33,7 +33,7 @@ new Vue({
         AreaSelector
     },
     data: {
-        address: '0602',
+        address: '全国',
         sep: '_'
     },
     methods: {
