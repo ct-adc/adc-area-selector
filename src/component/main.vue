@@ -1,12 +1,12 @@
 <template>
     <div class="area-select-container">
-        <select class="form-control area-select mr10"
+        <select :disabled="disabled" class="form-control area-select mr10"
                 v-model="n" v-if="showNation">
             <option value="全国">全国</option>
             <option value="">指定地区</option>
         </select>
         <select class="form-control area-select mr10"
-                :disabled="disabled"
+                :disabled="disabledArea || disabled"
                 v-model="p">
             <option value="">省</option>
             <option v-for="province in provinces" :key="province.Name">{{ province.Name }}</option>
@@ -14,7 +14,7 @@
 
         <select class="form-control area-select mr10"
                 v-if="showCity"
-                :disabled="disabled"
+                :disabled="disabledArea || disabled"
                 v-model="c">
             <option value="">市</option>
             <option v-for="city in cities" :key="city.Name">{{ city.Name }}</option>
@@ -22,7 +22,7 @@
 
         <select class="form-control area-select mr10"
                 v-if="showRegion"
-                :disabled="disabled"
+                :disabled="disabledArea || disabled"
                 v-model="d">
             <option value="">县 / 区</option>
             <option v-for="district in districts" :key="district.Name">{{ district.Name }}</option>
@@ -36,6 +36,10 @@
     export default {
         name: 'area-selector',
         props: {
+            disabled: {
+                type: Boolean,
+                default: false
+            },
             initialArea: {
                 type: String,
                 default: ''
@@ -83,7 +87,7 @@
             };
         },
         computed: {
-            disabled() {
+            disabledArea() {
                 return this.n === '全国';
             },
             showCity(){
